@@ -82,11 +82,8 @@ class RedmineNotifier
     priority = issue.priority.name
     issueUrl = payload.url
     message = """
-              [#{project}] #{author} #{action} #{tracker}##{issueId}
-              Subject: #{issueSubject}
-              Status: #{status}
-              Priority: #{priority}
-              Assignee: #{assignee}
+              [#{project}] #{author} #{action} #{tracker}##{issueId} (#{status})
+              Subject: #{issueSubject} #{assignee.empty? ? '' : "\nAssignee: " + assignee}
               URL: #{issueUrl}
               """
 
