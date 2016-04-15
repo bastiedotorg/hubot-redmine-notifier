@@ -83,7 +83,7 @@ class RedmineNotifier
     issueUrl = payload.url
     message = """
               [#{project}] #{author} #{action} #{tracker}##{issueId} (#{status})
-              Subject: #{issueSubject} #{!!assignee ? "\nAssignee: " + assignee : ''}
+              Subject: #{issueSubject} #{if !!assignee then "\nAssignee: " + assignee else ''}
               URL: #{issueUrl}
               """
 
