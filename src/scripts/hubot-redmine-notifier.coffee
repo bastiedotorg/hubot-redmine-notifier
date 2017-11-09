@@ -72,21 +72,32 @@ class RedmineNotifier
     payload = data.payload
     issue = payload.issue
     project = issue.project.name
-    author = issue.author.login
     action = payload.action
-    tracker = issue.tracker.name
-    issueId = issue.id
-    issueSubject = issue.subject
-    status = issue.status.name
-    assignee = unless issue.assignee? then "" else issue.assignee.login
-    priority = issue.priority.name
     issueUrl = payload.url
-    message = """
-              [#{project}] #{author} #{action} #{tracker}##{issueId} (#{status})
-              Subject: #{issueSubject} #{if !!assignee then "\nAssignee: " + assignee else ''}
+
+    if (payload.action == 'updated_wiki') 
+       message = """
+              :pencil: Wiki Update [#{project}] #{issue.title}
+              #{issueUrl}
+              """             
+    else
+       author = issue.author.login
+       tracker = issue.tracker.name
+       issueId = issue.id
+       issueSubject = issue.subject
+       status = issue.status.name
+       ratio = issue.done_ratio
+       assignee = unless issue.assignee? then "" else issue.assignee.login
+       priority = issue.priority.name
+       message = """
+              :pencil: [#{project}] #{action} #{tracker}##{issueId}
+              Subject: #{issueSubject}
+              Status: #{status}
+              Priority: #{priority}
+              Assignee: @#{assignee}
+              Ratio: #{ratio}%
               URL: #{issueUrl}
               """
-
     @robot.send envelope, message
 
 module.exports = (robot) ->
